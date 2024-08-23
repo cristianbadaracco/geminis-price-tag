@@ -16,7 +16,7 @@ export interface TableWrapperProps<T extends AnyObject> {
   expandable?: boolean;
   expandedRowComponent?: (record: T) => JSX.Element;
   scrollX?: number | true;
-  rowSelection?: boolean;
+  rowSelection?: TableProps<T>["rowSelection"];
 }
 
 interface ExpandIconProps<T extends AnyObject> {
@@ -31,7 +31,7 @@ const TableWrapper = <T extends AnyObject>({
   expandable,
   expandedRowComponent,
   scrollX,
-  rowSelection = false,
+  rowSelection,
   ...rest
 }: TableWrapperProps<T>): JSX.Element => {
   const scroll = isUndefined(scrollX)
@@ -110,13 +110,13 @@ const TableWrapper = <T extends AnyObject>({
       expandable={expandable ?? false ? expandableConfig : undefined}
       scroll={scroll}
       pagination={{
-        pageSize: 25,
+        defaultPageSize: 50,
         position: ["bottomRight"],
         showTotal: (total, range) =>
-          `Showing ${range[0]} to ${range[1]} of ${total} entries`,
+          `Mostrando ${range[0]} - ${range[1]} de un total de ${total} items`,
       }}
       rowClassName={(_, index): string => (index % 2 !== 0 ? "stripe-row" : "")}
-      rowSelection={rowSelection ? { type: "checkbox" } : undefined}
+      rowSelection={rowSelection}
       {...rest}
     />
   );
