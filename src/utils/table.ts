@@ -1,6 +1,7 @@
 import type { TableColumnsType } from "antd";
 
 import { Anexo } from "../types/Anexo";
+import { transformCurrency } from "./format";
 
 export const getColumnsDef = (): TableColumnsType<Anexo> => [
   {
@@ -55,6 +56,7 @@ export const getColumnsDef = (): TableColumnsType<Anexo> => [
     dataIndex: "Precio",
     key: "Precio",
     width: 170,
+    render: (value) => `$ ${transformCurrency(value)}`,
     sorter: (a: Anexo, b: Anexo) => {
       const aAnexos = typeof a.Precio === "string" ? a.Precio : "";
       const bAnexos = typeof b.Precio === "string" ? b.Precio : "";
@@ -67,6 +69,7 @@ export const getColumnsDef = (): TableColumnsType<Anexo> => [
     dataIndex: "Precio c/iva",
     key: "Precio c/iva",
     width: 170,
+    render: (value) => `$ ${transformCurrency(value)}`,
     sorter: (a: Anexo, b: Anexo) => {
       const aAnexos =
         typeof a?.["Precio c/iva"] === "string" ? a?.["Precio c/iva"] : "";
@@ -81,6 +84,7 @@ export const getColumnsDef = (): TableColumnsType<Anexo> => [
     dataIndex: "PrecioFinal",
     key: "PrecioFinal",
     width: 170,
+    render: (value) => `$ ${value}`,
     sorter: (a: Anexo, b: Anexo) => {
       const aAnexos = typeof a.PrecioFinal === "number" ? a.PrecioFinal : 0;
       const bAnexos = typeof b.PrecioFinal === "number" ? b.PrecioFinal : 0;

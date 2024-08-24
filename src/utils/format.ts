@@ -7,13 +7,18 @@ export const formatTableData = (data: Anexo[] | undefined) => {
   }));
 };
 
+export const transformCurrency = (currencyString: string) => {
+  const normalizedString = currencyString.replace(/\./g, "").replace(/,/g, ".");
+  return parseFloat(normalizedString);
+};
+
 export const cleanAnexoOriginalData = (data: string[][]) => {
   return data
     .slice(3)
     .filter((row: string[]) => row[0])
     .map((row: string[]) => {
-      const precioSinIVA = parseFloat(row[3].replace(/,/g, ""));
-      const divisor = parseFloat(row[5].replace(/,/g, ""));
+      const precioSinIVA = transformCurrency(row[3]);
+      const divisor = transformCurrency(row[5]);
 
       const anexoOriginal: AnexoOriginal = {
         Código: row[0],
