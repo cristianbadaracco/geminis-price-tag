@@ -21,7 +21,9 @@ type TableRowSelection<T extends object = object> =
   TableProps<T>["rowSelection"];
 
 function Home() {
-  const [data, setData] = useState<Anexo[] | undefined>(undefined);
+  const [data, setData] = useState<Anexo[] | undefined>(
+    JSON.parse(localStorage.getItem("products") || "[]")
+  );
   const [uploadedFile, setUploadedFile] = useState<UploadFile | undefined>(
     undefined
   );
@@ -38,7 +40,10 @@ function Home() {
   useEffect(() => {
     if (data) {
       setSelectedType("anexo");
-      setFilteredData(formatTableData(data));
+      const formattedTableData = formatTableData(data);
+      setFilteredData(formattedTableData);
+
+      localStorage.setItem("products", JSON.stringify(data));
     }
   }, [data]);
 
@@ -64,12 +69,11 @@ function Home() {
     const selectedRows = selectedRowKeys.map((key) => {
       return data?.find((item) => item.Código === key);
     });
-    console.log("SELECTED", selectedRows);
     localStorage.setItem("selectedRows", JSON.stringify(selectedRows));
     navigate("/report");
   };
 
-  const columnsDef = getColumnsDef(selectedType);
+  const columnsDef = getColumnsDef();
 
   return (
     <div className="mx-4 my-8">
@@ -85,9 +89,9 @@ function Home() {
             <div className="w-80">
               <Input.Search
                 placeholder="Buscar por código o detalle"
-                allowClear
                 enterButton={<SearchOutlined />}
                 onSearch={handleSearch}
+                onChange={(e) => handleSearch(e.target.value)}
                 width={200}
                 size="large"
               />

@@ -1,19 +1,21 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, useCallback } from "react";
 import { Upload, Button, UploadFile } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import Papa from "papaparse";
 
-import { Anexo, AnexoOriginal } from "../types/Anexo";
+import { Anexo } from "../types/Anexo";
+import { cleanAnexoOriginalData } from "../utils/format";
 
 interface CSVUploaderProps {
   onFileParsed: (data: Anexo[]) => void;
   label?: string;
-  uploadedFile?: (data: UploadFile | undefined) => void;
+  uploadedFile?: (data: UploadFile) => void;
 }
 const CSVUploader: React.FC<CSVUploaderProps> = ({
   onFileParsed,
   label = "Subir CSV",
-  uploadedFile,
+  uploadedFile = () => {},
 }) => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
@@ -26,29 +28,9 @@ const CSVUploader: React.FC<CSVUploaderProps> = ({
       uploadedFile(file);
       Papa.parse(file, {
         complete: (result) => {
-          const cleanedData = result.data
-            .slice(3)
-            .filter((row: string[]) => row[0])
-            .map((row: string[]) => {
-              const precioConIVA = parseFloat(row[4].replace(/,/g, ""));
-
-              const anexoOriginal: AnexoOriginal = {
-                Código: row[0],
-                Detalle: row[2],
-                Precio: row[3],
-                "Precio c/iva": row[4],
-                Divisor: row[5],
-                Envase: row[6],
-                PN: row[7],
-              };
-
-              const anexo: Anexo = {
-                ...anexoOriginal,
-                PrecioFinal: precioConIVA * 2,
-              };
-
-              return anexo;
-            });
+          const cleanedData = cleanAnexoOriginalData(
+            result?.data as string[][]
+          );
           onFileParsed(cleanedData);
         },
         header: false,

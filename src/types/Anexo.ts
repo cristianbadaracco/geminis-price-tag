@@ -9,5 +9,5 @@ export interface AnexoOriginal {
 }
 
 export interface Anexo extends AnexoOriginal {
-  PrecioFinal: number;
+  PrecioFinal: string;
 }
