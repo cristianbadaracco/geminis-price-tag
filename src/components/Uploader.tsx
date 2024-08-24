@@ -5,17 +5,19 @@ import { UploadOutlined } from "@ant-design/icons";
 import Papa from "papaparse";
 
 import { Anexo } from "../types/Anexo";
-import { cleanAnexoOriginalData } from "../utils/format";
+import { cleanData } from "../utils/format";
 
 interface CSVUploaderProps {
-  onFileParsed: (data: Anexo[]) => void;
+  onFileParsed: (data: Anexo[] | undefined) => void;
   label?: string;
   uploadedFile?: (data: UploadFile) => void;
+  type?: "anexo" | "completo";
 }
 const CSVUploader: React.FC<CSVUploaderProps> = ({
   onFileParsed,
   label = "Subir CSV",
   uploadedFile = () => {},
+  type = "anexo",
 }) => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
@@ -28,9 +30,7 @@ const CSVUploader: React.FC<CSVUploaderProps> = ({
       uploadedFile(file);
       Papa.parse(file, {
         complete: (result) => {
-          const cleanedData = cleanAnexoOriginalData(
-            result?.data as string[][]
-          );
+          const cleanedData = cleanData(result?.data as string[][], type);
           onFileParsed(cleanedData);
         },
         header: false,

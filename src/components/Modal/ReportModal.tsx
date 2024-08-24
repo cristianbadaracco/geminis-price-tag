@@ -10,7 +10,7 @@ interface ReportModalProps {
 const formatReportSubmit = (data: Anexo) => {
   return {
     ...data,
-    PrecioFinal: data?.PrecioFinal?.toString(),
+    PrecioFinal: parseFloat(data?.PrecioFinal)?.toFixed(2)?.toString(),
   };
 };
 

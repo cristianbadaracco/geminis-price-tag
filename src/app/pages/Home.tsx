@@ -129,8 +129,13 @@ function Home() {
             onFileParsed={setData}
             uploadedFile={setUploadedFile}
             label="Subir Anexo"
+            type="anexo"
           />
-          {/* <CSVUploader onFileParsed={setData} label="Subir Completo" /> */}
+          {/* <CSVUploader
+            onFileParsed={setData}
+            label="Subir Completo"
+            type="completo"
+          /> */}
         </div>
       )}
     </div>

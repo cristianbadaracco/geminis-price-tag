@@ -38,3 +38,9 @@ export const cleanAnexoOriginalData = (data: string[][]) => {
       return anexo;
     });
 };
+
+export const cleanData = (data: string[][], type: string) => {
+  if (type === "anexo") {
+    return cleanAnexoOriginalData(data);
+  }
+};
