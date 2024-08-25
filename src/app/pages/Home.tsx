@@ -33,7 +33,9 @@ function Home() {
   const [filteredData, setFilteredData] = useState<Anexo[] | undefined>(
     undefined
   );
-  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>(
+    JSON.parse(localStorage.getItem("selectedRowKeys") || "[]") ?? []
+  );
 
   const navigate = useNavigate();
 
@@ -58,6 +60,7 @@ function Home() {
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
+    localStorage.setItem("selectedRowKeys", JSON.stringify(newSelectedRowKeys));
   };
 
   const rowSelection: TableRowSelection<Anexo> = {
