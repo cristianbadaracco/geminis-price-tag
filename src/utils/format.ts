@@ -7,7 +7,7 @@ export const formatTableData = (data: Anexo[] | undefined) => {
   }));
 };
 
-export const transformCurrency = (currencyString: string) => {
+export const transformCurrency = (currencyString: string): number => {
   const normalizedString = currencyString.replace(/\./g, "").replace(/,/g, ".");
   return parseFloat(normalizedString);
 };

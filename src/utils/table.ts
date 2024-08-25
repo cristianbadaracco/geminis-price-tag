@@ -56,7 +56,7 @@ export const getColumnsDef = (): TableColumnsType<Anexo> => [
     dataIndex: "Precio",
     key: "Precio",
     width: 170,
-    render: (value) => `$ ${transformCurrency(value)}`,
+    render: (value) => `$ ${transformCurrency(value)?.toFixed(2)}`,
     sorter: (a: Anexo, b: Anexo) => {
       const aAnexos = typeof a.Precio === "string" ? a.Precio : "";
       const bAnexos = typeof b.Precio === "string" ? b.Precio : "";
@@ -69,7 +69,7 @@ export const getColumnsDef = (): TableColumnsType<Anexo> => [
     dataIndex: "Precio c/iva",
     key: "Precio c/iva",
     width: 170,
-    render: (value) => `$ ${transformCurrency(value)}`,
+    render: (value) => `$ ${transformCurrency(value).toFixed(2)}`,
     sorter: (a: Anexo, b: Anexo) => {
       const aAnexos =
         typeof a?.["Precio c/iva"] === "string" ? a?.["Precio c/iva"] : "";
