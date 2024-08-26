@@ -16,7 +16,7 @@ export const transformCurrency = (currencyString: string): number => {
   return parseFloat(normalizedString);
 };
 
-export const cleanAnexoOriginalData = (data: string[][]) => {
+export const cleanAnexo = (data: string[][]) => {
   return data
     .slice(3)
     .filter((row: string[]) => row[0])
@@ -42,7 +42,7 @@ export const cleanAnexoOriginalData = (data: string[][]) => {
     });
 };
 
-const cleanCompletoData = (data: string[][]) => {
+const cleanCompleto = (data: string[][]) => {
   if (!data || data.length === 0) return [];
 
   return data?.slice(1)?.map((row) => {
@@ -67,7 +67,11 @@ const cleanCompletoData = (data: string[][]) => {
 };
 
 export const cleanData = (data: string[][], type: string): Anexo[] => {
-  return type === "anexo"
-    ? cleanAnexoOriginalData(data)
-    : cleanCompletoData(data);
+  if (type === "anexo") {
+    return cleanAnexo(data);
+  } else if (type === "completo") {
+    return cleanCompleto(data);
+  }
+
+  return [];
 };

@@ -1,7 +1,14 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-import { Button, Input, Tooltip, UploadFile, type TableProps } from "antd";
+import {
+  Button,
+  Card,
+  Input,
+  Tooltip,
+  UploadFile,
+  type TableProps,
+} from "antd";
 import Table from "../../components/Table/Table";
 import CSVUploader from "../../components/Uploader";
 
@@ -20,7 +27,7 @@ type TableRowSelection<T extends object = object> =
   TableProps<T>["rowSelection"];
 
 function Home() {
-  const [data, setData] = useState<Anexo[] | undefined>(
+  const [data, setData] = useState<Anexo[] | undefined | null>(
     JSON.parse(localStorage.getItem("products") || "[]")
   );
   const [uploadedFile, setUploadedFile] = useState<UploadFile | undefined>(
@@ -84,6 +91,24 @@ function Home() {
 
   const columnsDef = getColumnsDefAnexo;
 
+  if (data === null) {
+    return (
+      <Card className="m-4" hoverable>
+        <p>
+          El formato del archivo cargado no es correcto. Intente subir otro
+          haciendo click{" "}
+          <span
+            className="text-blue-500 cursor-pointer"
+            onClick={() => setData(undefined)}
+          >
+            aquí
+          </span>
+          .
+        </p>
+      </Card>
+    );
+  }
+
   return (
     <div className="mx-4 my-8">
       {data && data.length > 0 ? (
@@ -138,17 +163,7 @@ function Home() {
               setUploadedFile(file);
               setSelectedType("anexo");
             }}
-            label="Subir Anexo"
-            type="anexo"
-          />
-          <CSVUploader
-            onFileParsed={setData}
-            uploadedFile={(file) => {
-              setUploadedFile(file);
-              setSelectedType("completo");
-            }}
-            label="Subir Completo"
-            type="completo"
+            label="Subir CSV"
           />
         </div>
       )}

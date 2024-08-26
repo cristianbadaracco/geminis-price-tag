@@ -7,18 +7,17 @@ import Papa from "papaparse";
 import { Anexo } from "../types/Anexo";
 
 import { cleanData } from "../utils/format";
+import { identifyStructure } from "../utils/types";
 
 interface CSVUploaderProps {
-  onFileParsed: (data: Anexo[] | undefined) => void;
+  onFileParsed: (data: Anexo[] | undefined | null) => void;
   label?: string;
   uploadedFile?: (data: UploadFile) => void;
-  type?: "anexo" | "completo";
 }
 const CSVUploader: React.FC<CSVUploaderProps> = ({
   onFileParsed,
   label = "Subir CSV",
   uploadedFile = () => {},
-  type = "anexo",
 }) => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
@@ -31,8 +30,9 @@ const CSVUploader: React.FC<CSVUploaderProps> = ({
       uploadedFile(file);
       Papa.parse(file, {
         complete: (result) => {
+          const type = identifyStructure(result?.data as string[]);
           const cleanedData = cleanData(result?.data as string[][], type);
-          onFileParsed(cleanedData);
+          onFileParsed(type === "unknown" ? null : cleanedData);
         },
         header: false,
         skipEmptyLines: true,
