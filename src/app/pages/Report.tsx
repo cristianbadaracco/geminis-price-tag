@@ -35,6 +35,8 @@ const Report = () => {
     showModal();
   };
 
+  console.log(products);
+
   return (
     <>
       <Modal
@@ -53,7 +55,7 @@ const Report = () => {
         {products &&
           products.map((item: Anexo, index: number) => (
             <div
-              key={item.Código}
+              key={item?.Código}
               className={`${
                 index !== 0 && index > 3 && index % 30 < 3 ? "mt-4" : ""
               }`}

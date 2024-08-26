@@ -33,9 +33,6 @@ function Home() {
   const [uploadedFile, setUploadedFile] = useState<UploadFile | undefined>(
     undefined
   );
-  const [selectedType, setSelectedType] = useState<"anexo" | "completo">(
-    "anexo"
-  );
   const [filteredData, setFilteredData] = useState<Anexo[] | undefined>(
     undefined
   );
@@ -93,80 +90,72 @@ function Home() {
 
   if (data === null) {
     return (
-      <Card className="m-4" hoverable>
-        <p>
-          El formato del archivo cargado no es correcto. Intente subir otro
-          haciendo click{" "}
-          <span
-            className="text-blue-500 cursor-pointer"
-            onClick={() => setData(undefined)}
+      <Card className="m-4 flex flex-row" hoverable>
+        <span>El formato del archivo cargado no es correcto.</span>
+        <div className="mt-4">
+          <CSVUploader
+            onFileParsed={setData}
+            uploadedFile={(file) => {
+              setUploadedFile(file);
+            }}
           >
-            aquí
-          </span>
-          .
-        </p>
+            <Button icon={<FileAddOutlined />}>Subir otro archivo</Button>
+          </CSVUploader>
+        </div>
       </Card>
     );
   }
 
   return (
     <div className="mx-4 my-8">
-      {data && data.length > 0 ? (
-        <div className="flex flex-col gap-2">
-          <div>
-            <span className="text-2xl uppercase font-weight-bold">
-              {`${selectedType} `}
-            </span>
-            <span>{uploadedFile?.name ? `(${uploadedFile.name})` : ""}</span>
+      <div className="flex flex-col gap-2">
+        <div>
+          <span className="text-2xl uppercase font-weight-bold">Géminis</span>
+          <span>{uploadedFile?.name ? ` - (${uploadedFile.name})` : ""}</span>
+        </div>
+        <div className="flex flex-row gap-2 justify-between mt-2 items-center">
+          <div className="w-80">
+            <Input.Search
+              placeholder="Buscar por código o detalle"
+              enterButton={<SearchOutlined />}
+              onSearch={handleSearch}
+              onChange={(e) => handleSearch(e.target.value)}
+              width={200}
+              size="large"
+            />
           </div>
-          <div className="flex flex-row gap-2 justify-between mt-2 items-center">
-            <div className="w-80">
-              <Input.Search
-                placeholder="Buscar por código o detalle"
-                enterButton={<SearchOutlined />}
-                onSearch={handleSearch}
-                onChange={(e) => handleSearch(e.target.value)}
-                width={200}
-                size="large"
-              />
-            </div>
-            <div className="flex flex-row gap-2">
-              <Tooltip title="Cargar otro archivo">
+          <div className="flex flex-row gap-2">
+            <CSVUploader
+              onFileParsed={setData}
+              uploadedFile={(file) => {
+                setUploadedFile(file);
+              }}
+            >
+              <Tooltip title="Cargar archivo">
                 <Button
                   onClick={handleOpenNewFile}
                   icon={<FileAddOutlined />}
                 />
               </Tooltip>
-              <Tooltip title="Imprimir">
-                <Button
-                  icon={<PrinterOutlined />}
-                  onClick={handleOnPrint}
-                  disabled={selectedRowKeys.length === 0}
-                />
-              </Tooltip>
-            </div>
-          </div>
-          <div>
-            <Table<Anexo>
-              dataSource={filteredData ?? []}
-              columns={columnsDef()}
-              rowSelection={rowSelection}
-              loading={false}
-            />
+            </CSVUploader>
+            <Tooltip title="Imprimir">
+              <Button
+                icon={<PrinterOutlined />}
+                onClick={handleOnPrint}
+                disabled={selectedRowKeys.length === 0}
+              />
+            </Tooltip>
           </div>
         </div>
-      ) : (
-        <div className="flex flex-row gap-4">
-          <CSVUploader
-            onFileParsed={setData}
-            uploadedFile={(file) => {
-              setUploadedFile(file);
-              setSelectedType("anexo");
-            }}
-            label="Subir CSV"
+        <div>
+          <Table<Anexo>
+            dataSource={filteredData ?? []}
+            columns={columnsDef()}
+            rowSelection={rowSelection}
+            loading={false}
           />
         </div>
-      )}
+      </div>
     </div>
   );
 }

@@ -13,11 +13,13 @@ interface CSVUploaderProps {
   onFileParsed: (data: Anexo[] | undefined | null) => void;
   label?: string;
   uploadedFile?: (data: UploadFile) => void;
+  children?: React.ReactNode;
 }
 const CSVUploader: React.FC<CSVUploaderProps> = ({
   onFileParsed,
-  label = "Subir CSV",
+  label,
   uploadedFile = () => {},
+  children,
 }) => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
@@ -54,8 +56,9 @@ const CSVUploader: React.FC<CSVUploaderProps> = ({
         fileList={fileList}
         accept="text/csv"
         maxCount={1}
+        showUploadList={false}
       >
-        <Button icon={<UploadOutlined />}>{label}</Button>
+        {children || <Button icon={<UploadOutlined />}>{label}</Button>}
       </Upload>
     </div>
   );
