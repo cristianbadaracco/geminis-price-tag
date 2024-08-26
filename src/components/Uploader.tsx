@@ -5,6 +5,7 @@ import { UploadOutlined } from "@ant-design/icons";
 import Papa from "papaparse";
 
 import { Anexo } from "../types/Anexo";
+
 import { cleanData } from "../utils/format";
 
 interface CSVUploaderProps {

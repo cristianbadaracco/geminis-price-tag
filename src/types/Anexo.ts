@@ -3,7 +3,6 @@ export interface AnexoOriginal {
   Detalle: string;
   Divisor: string;
   Envase: string;
-  PN: string;
   Precio: string;
   "Precio c/iva": string;
 }

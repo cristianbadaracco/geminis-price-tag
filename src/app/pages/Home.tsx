@@ -3,12 +3,11 @@ import { useNavigate } from "react-router-dom";
 
 import { Button, Input, Tooltip, UploadFile, type TableProps } from "antd";
 import Table from "../../components/Table/Table";
-
 import CSVUploader from "../../components/Uploader";
 
 import type { Anexo } from "../../types/Anexo";
 
-import { getColumnsDef } from "../../utils/table";
+import { getColumnsDefAnexo } from "../../utils/table";
 import { formatTableData } from "../../utils/format";
 
 import {
@@ -41,7 +40,6 @@ function Home() {
 
   useEffect(() => {
     if (data) {
-      setSelectedType("anexo");
       const formattedTableData = formatTableData(data);
       setFilteredData(formattedTableData);
 
@@ -52,8 +50,8 @@ function Home() {
   const handleSearch = (value: string) => {
     const filtered = data?.filter(
       (item) =>
-        item.Código.toLowerCase().includes(value.toLowerCase()) ||
-        item.Detalle.toLowerCase().includes(value.toLowerCase())
+        item?.Código?.toLowerCase().includes(value.toLowerCase()) ||
+        item?.Detalle?.toLowerCase().includes(value.toLowerCase())
     );
     setFilteredData(formatTableData(filtered));
   };
@@ -76,7 +74,15 @@ function Home() {
     navigate("/report");
   };
 
-  const columnsDef = getColumnsDef();
+  const handleOpenNewFile = () => {
+    setData(undefined);
+    setUploadedFile(undefined);
+    setSelectedRowKeys([]);
+    localStorage.removeItem("selectedRowKeys");
+    localStorage.removeItem("products");
+  };
+
+  const columnsDef = getColumnsDefAnexo;
 
   return (
     <div className="mx-4 my-8">
@@ -102,9 +108,7 @@ function Home() {
             <div className="flex flex-row gap-2">
               <Tooltip title="Cargar otro archivo">
                 <Button
-                  onClick={() => {
-                    setData(undefined);
-                  }}
+                  onClick={handleOpenNewFile}
                   icon={<FileAddOutlined />}
                 />
               </Tooltip>
@@ -120,7 +124,7 @@ function Home() {
           <div>
             <Table<Anexo>
               dataSource={filteredData ?? []}
-              columns={columnsDef}
+              columns={columnsDef()}
               rowSelection={rowSelection}
               loading={false}
             />
@@ -130,15 +134,22 @@ function Home() {
         <div className="flex flex-row gap-4">
           <CSVUploader
             onFileParsed={setData}
-            uploadedFile={setUploadedFile}
+            uploadedFile={(file) => {
+              setUploadedFile(file);
+              setSelectedType("anexo");
+            }}
             label="Subir Anexo"
             type="anexo"
           />
-          {/* <CSVUploader
+          <CSVUploader
             onFileParsed={setData}
+            uploadedFile={(file) => {
+              setUploadedFile(file);
+              setSelectedType("completo");
+            }}
             label="Subir Completo"
             type="completo"
-          /> */}
+          />
         </div>
       )}
     </div>

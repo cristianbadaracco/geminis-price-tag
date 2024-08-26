@@ -1,9 +1,10 @@
 import type { TableColumnsType } from "antd";
 
 import { Anexo } from "../types/Anexo";
+
 import { transformCurrency } from "./format";
 
-export const getColumnsDef = (): TableColumnsType<Anexo> => [
+export const getColumnsDefAnexo = (): TableColumnsType<Anexo> => [
   {
     title: "CODIGO",
     dataIndex: "Código",
