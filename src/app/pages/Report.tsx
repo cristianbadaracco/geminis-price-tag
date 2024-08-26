@@ -51,8 +51,10 @@ const Report = () => {
       >
         <ReportModal onSave={onProductUpdate} data={selectedProduct} />
       </Modal>
-      <div className="grid grid-cols-3 gap-2 m-2 cursor-pointer">
+      <div className="grid grid-cols-3 gap-4 m-2 cursor-pointer">
         {products &&
+          Array.isArray(products) &&
+          products.length > 0 &&
           products.map((item: Anexo, index: number) => (
             <div
               key={item?.Código}
@@ -61,7 +63,7 @@ const Report = () => {
               }`}
               onClick={() => handleEdit(item)}
             >
-              <Tag item={item} />
+              <Tag item={item ?? {}} />
             </div>
           ))}
       </div>

@@ -4,11 +4,13 @@ interface TagProps {
   item: Anexo;
 }
 
-const Tag: React.FC<TagProps> = ({ item: { Detalle, PrecioFinal } }) => {
+const Tag: React.FC<TagProps> = ({
+  item: { Detalle = "", PrecioFinal = "" },
+}) => {
   return (
     <div
       id="tag"
-      className="flex flex-col w-[250px] h-[102px] border-black border justify-between"
+      className="flex flex-col w-[250px] h-[95px] border-black border justify-between"
     >
       <div className="flex flex-row justify-center p-1 h-1/4">
         <span className="text-xs truncate underline">{Detalle}</span>

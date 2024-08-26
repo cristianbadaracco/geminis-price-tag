@@ -106,6 +106,8 @@ function Home() {
     );
   }
 
+  console.log(selectedRowKeys, data);
+
   return (
     <div className="mx-4 my-8">
       <div className="flex flex-col gap-2">
@@ -142,7 +144,7 @@ function Home() {
               <Button
                 icon={<PrinterOutlined />}
                 onClick={handleOnPrint}
-                disabled={selectedRowKeys.length === 0}
+                disabled={selectedRowKeys.length === 0 || data?.length === 0}
               />
             </Tooltip>
           </div>
